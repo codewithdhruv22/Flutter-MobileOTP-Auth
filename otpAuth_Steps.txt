@@ -1,0 +1,129 @@
+1.Register Your App In Firebase
+2.Add Dependecies In Your Pubspec.yaml
+  firebase_auth: ^3.0.1
+  firebase_core: ^1.4.0
+
+3.Initialize Firebase App In Main.dart
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+[[
+Change minSDKversion to 19 
+add multiDexEnabled true in defaultConfig
+add implementation "androidx.browser:browser:1.3.0" in depedencies
+]]
+
+
+4.Import packages & Crate FirebaseAuth instance in login page
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+5.Create a auth.verifyPhoneNumber Method & You have to pass phonenumber here
+
+      await _auth.verifyPhoneNumber(
+
+              phoneNumber: "+91${phoneController.text}",
+              verificationCompleted: (phoneAuthCredential) async{
+                showLoading = false;
+
+              },
+              verificationFailed: (verificationFailed){
+                setState(() {
+                  showLoading = false;
+                });
+                print(verificationFailed);
+              },
+
+              codeSent: (verificationID, resendingToken) async{
+                setState(() {
+                  showLoading = false;
+                  currentState = MobileVerificationState.SHOW_OTP_FORM_STATE;
+                  this.verificationID = verificationID;
+                });
+              },
+              codeAutoRetrievalTimeout: (verificationID) async{
+
+              }
+          );
+
+6.Now create a AuthCredention phoneAuthCredentio. You have to pass OTP here.
+ AuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: verificationID, smsCode: otpController.text);
+
+7.After creating credential simply signin user with phone number in singInWithPhoneNumber Method you have to pass phoneAuthCredential here
+
+  void signInWithPhoneAuthCred(AuthCredential phoneAuthCredential) async
+  {
+    setState(() {
+      showLoading  = true;
+    });
+    try {
+      final authCred = await _auth.signInWithCredential(phoneAuthCredential);
+      setState(() {
+        showLoading = false;
+      });
+      if(authCred.user != null)
+      {
+
+        // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => HomePage()));
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        showLoading  = false;
+      });
+      print(e.message);
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text('Some Error Occured. Try Again Later')));
+    }
+  }
+**************OTP AUTHENTICATION COMPLETED****************
+
+
+
+
+
+
+  showOtpFormWidget(context){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Spacer(),
+        Text("Verify Your Phone Number" , style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+        SizedBox(height: 7,),
+        Text("Enter The Code Sent To +91${phoneController.text}"),
+        SizedBox(height: 20,),
+        Center(
+          child:       TextField(
+            onChanged: (String value) async {
+              if(value.length == 6){
+                setState(() {
+                  isOTPDisabled = false;
+                });
+              }else{
+                setState(() {
+                  isOTPDisabled = true;
+                });
+              }
+
+            },
+            controller: otpController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12) ),
+                hintText: "Enter Your OTP"
+            ),
+          ),
+        ),
+        SizedBox(height: 20,),
+        ElevatedButton(onPressed: isOTPDisabled ? null : () {
+          AuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: verificationID, smsCode: otpController.text);
+
+          signInWithPhoneAuthCred(phoneAuthCredential);
+          setState( ()  {
+            SuccessLogin();
+          });
+
+        }, child: Text("Verify")),
+        SizedBox(height: 16,),
+        Spacer()
+      ],
+    );
+  }
+
