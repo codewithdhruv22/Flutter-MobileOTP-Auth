@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "40113955400",
+    "project_id": "otpauthyt",
+    "storage_bucket": "otpauthyt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40113955400:android:e3fded308e6cffd588ae7d",
+        "android_client_info": {
+          "package_name": "com.example.otp_auth_flutter_yt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "40113955400-1ml0t4pp929ac5k6ealu6bj190kfh3fe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.otp_auth_flutter_yt",
+            "certificate_hash": "8731aadec669fbb4ec2cb4a789aa570008395308"
+          }
+        },
+        {
+          "client_id": "40113955400-pf3j67guv8rmihkrkmgktlmp41cic22m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaKN3EO0SEOqITFbxOdypzch8PMweocy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "40113955400-pf3j67guv8rmihkrkmgktlmp41cic22m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
